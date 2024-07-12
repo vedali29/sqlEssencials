@@ -1,0 +1,191 @@
+Joins in SQL are used to combine rows from two or more tables based on a related column between them. They allow you to query data from multiple tables and return a single result set. 
+Here are the most common types of joins:
+
+  
+  1. INNER JOIN
+- **Definition**: Returns only the rows that have matching values in both tables.
+- **Usage**: Used when you want to retrieve data that exists in both tables.
+
+     **Syntax**:
+
+SELECT column_name(s)
+FROM table1
+INNER JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+     **Example**:
+
+SELECT Orders.order_id, Customers.customer_name
+FROM Orders
+INNER JOIN Customers ON Orders.customer_id = Customers.customer_id;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### 2. LEFT JOIN (or LEFT OUTER JOIN)
+- **Definition**: Returns all rows from the left table, and the matched rows from the right table. If no match is found, NULL values are returned for columns from the right table.
+- **Usage**: Used when you want to retrieve all data from the left table and only matching data from the right table.
+
+**Syntax**:
+
+SELECT column_name(s)
+FROM table1
+LEFT JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+**Example**:
+
+SELECT Employees.name, Departments.department_name
+FROM Employees
+LEFT JOIN Departments ON Employees.department_id = Departments.department_id;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### 3. RIGHT JOIN (or RIGHT OUTER JOIN)
+- **Definition**: Returns all rows from the right table, and the matched rows from the left table. If no match is found, NULL values are returned for columns from the left table.
+- **Usage**: Used when you want to retrieve all data from the right table and only matching data from the left table.
+
+**Syntax**:
+
+SELECT column_name(s)
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+**Example**:
+
+SELECT Employees.name, Departments.department_name
+FROM Employees
+RIGHT JOIN Departments ON Employees.department_id = Departments.department_id;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### 4. FULL JOIN (or FULL OUTER JOIN)
+- **Definition**: Returns all rows when there is a match in either left or right table. If there is no match, the result is NULL on the side that doesn't have a match.
+- **Usage**: Used when you want to retrieve all data from both tables and include rows that do not have matching data in the other table.
+
+**Syntax**:
+
+SELECT column_name(s)
+FROM table1
+FULL OUTER JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+**Example**:
+
+SELECT Employees.name, Departments.department_name
+FROM Employees
+FULL OUTER JOIN Departments ON Employees.department_id = Departments.department_id;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### 5. CROSS JOIN
+- **Definition**: Returns the Cartesian product of the two tables. Each row in the first table is paired with all rows in the second table.
+- **Usage**: Used when you want to combine all rows from two tables without any condition.
+
+**Syntax**:
+
+SELECT column_name(s)
+FROM table1
+CROSS JOIN table2;
+
+
+**Example**:
+
+SELECT Employees.name, Departments.department_name
+FROM Employees
+CROSS JOIN Departments;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### 6. SELF JOIN
+- **Definition**: A self join is a regular join, but the table is joined with itself.
+- **Usage**: Used when you want to compare rows within the same table.
+
+**Syntax**:
+
+SELECT a.column_name, b.column_name
+FROM table_name a, table_name b
+WHERE condition;
+
+
+**Example**:
+
+SELECT a.employee_id, a.name, b.name AS manager_name
+FROM Employees a
+LEFT JOIN Employees b ON a.manager_id = b.employee_id;
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### Practical Example
+
+Consider two tables: `Students` and `Courses`.
+
+**Students**:
+
+CREATE TABLE Students (
+    student_id INT,
+    name VARCHAR(100),
+    course_id INT
+);
+
+
+**Courses**:
+
+CREATE TABLE Courses (
+    course_id INT,
+    course_name VARCHAR(100)
+);
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**INNER JOIN**:
+
+SELECT Students.name, Courses.course_name
+FROM Students
+INNER JOIN Courses ON Students.course_id = Courses.course_id;
+
+This will return only the students who are enrolled in courses.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**LEFT JOIN**:
+
+SELECT Students.name, Courses.course_name
+FROM Students
+LEFT JOIN Courses ON Students.course_id = Courses.course_id;
+
+This will return all students, including those who are not enrolled in any course (with `NULL` for course names).
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**RIGHT JOIN**:
+
+SELECT Students.name, Courses.course_name
+FROM Students
+RIGHT JOIN Courses ON Students.course_id = Courses.course_id;
+
+This will return all courses, including those with no students enrolled (with `NULL` for student names).
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**FULL OUTER JOIN** (Note: Not all SQL databases support FULL OUTER JOIN directly):
+
+SELECT Students.name, Courses.course_name
+FROM Students
+FULL OUTER JOIN Courses ON Students.course_id = Courses.course_id;
+
+This will return all students and all courses, including students without courses and courses without students.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
