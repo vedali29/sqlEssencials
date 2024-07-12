@@ -1,0 +1,119 @@
+primary key is unique key
+  Definition: A primary key is a column (or a set of columns) in a table that uniquely identifies each row in that table.
+Characteristics:
+1. Must contain unique values.
+2. Cannot contain NULL values.
+3. Each table can have only one primary key.
+Usage: Ensures that each row can be uniquely identified.
+
+
+  
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Foreign Key
+Definition: A foreign key is a column (or a set of columns) in a table that establishes a link between the data in two tables.
+Characteristics:
+1. The foreign key in the child table points to the primary key in the parent table.
+2. Can contain NULL values (if the relationship is optional).
+Usage: Ensures referential integrity between two tables.
+
+  //example:
+  CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    employee_id INT,
+    FOREIGN KEY (employee_id) REFERENCES Employees(id)
+);
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Unique Key
+Definition: A unique key is a column (or a set of columns) that uniquely identifies each row in a table, similar to a primary key, but allows for one NULL value.
+Characteristics:
+1. Must contain unique values.
+2. Can contain NULL values (only one NULL value per unique constraint).
+  
+A table can have multiple unique keys.
+Usage: Ensures that all values in a column are unique.
+
+  //Example:
+
+CREATE TABLE Users (
+    user_id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE
+);
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Composite Key
+Definition: A composite key is a primary key composed of two or more columns.
+  
+Characteristics:
+1. The combination of the columns must be unique.
+2. Usage: When a single column is not sufficient to uniquely identify a row.
+
+  //Example:
+
+CREATE TABLE Enrollments (
+    student_id INT,
+    course_id INT,
+    PRIMARY KEY (student_id, course_id)
+);
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Candidate Key
+Definition: A candidate key is a column, or set of columns, that can uniquely identify any row in a table. 
+            A table can have multiple candidate keys, but one of them will be chosen as the primary key.
+Characteristics:
+1. Must contain unique values.
+2. Cannot contain NULL values.
+Usage: Any of the candidate keys can be chosen as the primary key.
+
+  //Example:
+  
+CREATE TABLE Products (
+    product_id INT,
+    product_code VARCHAR(100),
+    PRIMARY KEY (product_id),
+    UNIQUE (product_code)
+);
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Surrogate Key
+Definition: A surrogate key is an artificial key that is used as a substitute for a natural key.
+Characteristics:
+Usually an auto-incrementing number.
+Not derived from the actual data.
+Usage: Provides a unique identifier for each row when no suitable natural key exists.
+
+  //Example:
+
+CREATE TABLE Orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_date DATE,
+    customer_id INT
+);
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Alternate Key
+Definition: An alternate key is any candidate key that is not the primary key.
+Characteristics:
+1. Can be used to uniquely identify a row.
+2. Usage: Provides alternate ways to uniquely identify rows.
+  
+   //Example:
+
+CREATE TABLE Users (
+    user_id INT,
+    username VARCHAR(100),
+    email VARCHAR(100),
+    PRIMARY KEY (user_id),
+    UNIQUE (username),
+    UNIQUE (email)
+);
+
