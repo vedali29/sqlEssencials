@@ -1,0 +1,127 @@
+////////case
+
+  In SQL, the `CASE` statement is used to create conditional logic. It operates similarly to an `IF-THEN-ELSE` statement in programming languages.
+  The `CASE` statement goes through conditions and returns a value when the first condition is met. If no conditions are true, it returns the value in the `ELSE` clause. 
+  If there is no `ELSE` clause and no conditions are true, it returns `NULL`.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+  Basic Syntax
+
+
+CASE
+    WHEN condition1 THEN result1
+    WHEN condition2 THEN result2
+    ...
+    [ELSE resultN]
+END
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+Example Usage
+
+       
+  ####
+  1. Simple Example
+
+Consider a table `Employees` with columns `employee_id`, `name`, and `salary`. We want to create a query that categorizes employees based on their salary.
+
+
+SELECT 
+    employee_id,
+    name,
+    salary,
+    CASE
+        WHEN salary > 50000 THEN 'High Salary'
+        WHEN salary BETWEEN 30000 AND 50000 THEN 'Average Salary'
+        ELSE 'Low Salary'
+    END AS salary_category
+FROM Employees;
+
+
+
+In this example, the `CASE` statement evaluates each row:
+- If the salary is greater than 50000, it returns 'High Salary'.
+- If the salary is between 30000 and 50000, it returns 'Average Salary'.
+- Otherwise, it returns 'Low Salary'.
+
+  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+#### 2. Using `CASE` in `WHERE` Clause
+
+
+SELECT 
+    employee_id,
+    name,
+    salary
+FROM Employees
+WHERE 
+    CASE
+        WHEN salary > 50000 THEN 'High Salary'
+        WHEN salary BETWEEN 30000 AND 50000 THEN 'Average Salary'
+        ELSE 'Low Salary'
+    END = 'High Salary';
+
+
+
+Here, the `CASE` statement is used to filter rows based on the salary category.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+#### 3. Using `CASE` with Aggregation
+
+Consider a table `Sales` with columns `sales_id`, `product_id`, `quantity`, and `amount`. We want to sum the sales amount by product categories.
+
+SELECT 
+    product_id,
+    SUM(
+        CASE 
+            WHEN amount > 100 THEN amount
+            ELSE 0
+        END
+    ) AS total_high_value_sales
+FROM Sales
+GROUP BY product_id;
+
+
+In this example, the `CASE` statement is used within an aggregate function to sum only the sales amounts greater than 100.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+### Explanation of the Provided Example
+
+
+SELECT 
+    machine_id, 
+    ROUND(AVG(end_time - start_time), 3) AS processing_time
+FROM (
+    SELECT
+        machine_id,
+        process_id,
+        MAX(CASE WHEN activity_type = 'end' THEN timestamp END) AS end_time,
+        MAX(CASE WHEN activity_type = 'start' THEN timestamp END) AS start_time
+    FROM Activity
+    GROUP BY machine_id, process_id
+) AS process_times
+GROUP BY machine_id;
+
+
+
+
+### Detailed Breakdown
+
+1. **Inner Query (`process_times`)**:
+    - **Subquery**: Groups the data by `machine_id` and `process_id`.
+    - **Conditional Logic**: 
+        ```sql
+        MAX(CASE WHEN activity_type = 'end' THEN timestamp END) AS end_time,
+        MAX(CASE WHEN activity_type = 'start' THEN timestamp END) AS start_time
+        ```
+        - The `CASE` statement checks the value of `activity_type`.
+        - If `activity_type` is 'end', it returns the `timestamp` as `end_time`.
+        - If `activity_type` is 'start', it returns the `timestamp` as `start_time`.
+    - **MAX Function**: Since each `(machine_id, process_id)` pair has unique 'start' and 'end' records, using `MAX` helps to select the respective timestamps for 'start' and 'end' activities.
+    - **Aliases**: `end_time` and `start_time` are aliases for the computed columns.
+
+2. **Outer Query**:
+    - Groups the results by `machine_id`.
+    - Calculates the average processing time for each machine by computing the difference between `end_time` and `start_time` for each process.
+    - Uses the `AVG` function to compute the average time and `ROUND` to format it to three decimal places.
